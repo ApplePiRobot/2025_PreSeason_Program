@@ -1,17 +1,18 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Falcon extends SubsystemBase{
-    private static Falcon instance = null;
+public class Shooter extends SubsystemBase{
+    private static Shooter instance = null;
     private static final double FALCON_500_MAX_SPEED_RPS = 6380/60;
 
     private final TalonFX m_motor;
 
-    private Falcon() {
+    private Shooter() {
         m_motor = new TalonFX(3);
     }
     
@@ -21,11 +22,12 @@ public class Falcon extends SubsystemBase{
 
     public void setTargetVelocityRPM(double rpm) {
         double rps = rpm/60;
+        m_motor.setControl(new MotionMagicVelocityVoltage(rps));
     }
 
-    public static Falcon getInstance() {
+    public static Shooter getInstance() {
         if (instance == null) {
-            instance = new Falcon();
+            instance = new Shooter();
         }
         return instance;
     }

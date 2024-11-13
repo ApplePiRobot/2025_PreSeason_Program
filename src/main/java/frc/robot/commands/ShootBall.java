@@ -3,12 +3,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class FalconRun extends Command {
+public class ShootBall extends Command{
+    private final double m_percentOutput;
     private final Shooter m_falcon;
-    private final double m_rpm;
 
-    public FalconRun(double rpm) {
-        m_rpm = rpm;
+    public ShootBall(double percentOutput){
+        m_percentOutput = percentOutput;
 
         m_falcon = Shooter.getInstance();
         addRequirements(m_falcon);
@@ -16,6 +16,6 @@ public class FalconRun extends Command {
 
     @Override
     public void initialize(){
-        m_falcon.setTargetVelocityRPM(m_rpm);
+        m_falcon.setPercentOutput(m_percentOutput);
     }
 }
