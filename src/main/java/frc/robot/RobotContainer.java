@@ -9,10 +9,13 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.FalconRun;
 import frc.robot.commands.ShootBall;
-import frc.robot.commands.Falconv3;
+//import frc.robot.commands.Falconv3;
 import frc.robot.commands.IntakeBall;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 import io.github.oblarg.oblog.Logger;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,12 +27,19 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //subsystems
+  private final Shooter m_shooter;
 
+  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final CommandXboxController m_controller = new CommandXboxController(1);
 
 
   public RobotContainer() {
+    m_shooter = Shooter.getInstance();
+    // Shuffleboard.selectTab("RobotContainer");
+    // Shuffleboard.getTab("RobotContainer")
+    //   .add("rand" ,SmartDashboard.putNumber("Shooter RPM", 10));
+
     Logger.configureLoggingAndConfig(this, false);
 
     configureBindings();
@@ -61,6 +71,12 @@ public class RobotContainer {
 
     m_controller.a().onTrue(new IntakeBall(10.0).andThen(new ShootBall(10.0)));
     m_controller.a().onFalse(new IntakeBall(0.0).andThen(new ShootBall(0.0)));
+
+    m_controller.x().onTrue(new FalconRun(2000.00));
+    m_controller.x().onFalse(new FalconRun(0.0));
+
+    m_controller.y().onTrue(new FalconRun(3000.00));
+    m_controller.y().onFalse(new FalconRun(0.00));
   }
 
 
@@ -71,8 +87,8 @@ public class RobotContainer {
 
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
-}
+//   public Command getAutonomousCommand() {
+//     // An example command will be run in autonomous
+//     return Autos.exampleAuto(m_exampleSubsystem);
+//   }
+ }

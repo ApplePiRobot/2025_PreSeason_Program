@@ -12,39 +12,46 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class Shooter extends SubsystemBase{
+public class Shooter extends SubsystemBase implements Loggable{
     private static Shooter instance = null;
     private static final double FALCON_500_MAX_SPEED_RPS = 6380/60;
 
     private final TalonFX m_motor;
 
-    // private static final CurrentLimitsConfigs CURRENT_LIMITS_CONFIGS = new CurrentLimitsConfigs()
-    //     .withSupplyCurrentLimit(60)
-    //     .withSupplyTimeThreshold(0.5)
-    //     .withSupplyCurrentThreshold(40)
-    //     .withStatorCurrentLimit(80);
+    private static final CurrentLimitsConfigs CURRENT_LIMITS_CONFIGS = new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(60)
+        .withSupplyTimeThreshold(0.5)
+        .withSupplyCurrentThreshold(40)
+        .withStatorCurrentLimit(80);
 
-    // private static final Slot0Configs PID_GAINS = new Slot0Configs()
-    //     .withKV(0.0)
-    //     .withKP(0.0);
+    private static final Slot0Configs PID_GAINS = new Slot0Configs()
+        .withKV(0.12)
+        .withKP(0.29);
 
     private Shooter() {
         m_motor = new TalonFX(20);
-
-        // setUpMotor(m_motor, InvertedValue.Clockwise_Positive);
+        
+        setUpMotor(m_motor, InvertedValue.Clockwise_Positive);
     }
 
-    // private void setUpMotor(TalonFX motor, InvertedValue invert) {
-    //     motor.getConfigurator().apply(new TalonFXConfiguration());
+    private void setUpMotor(TalonFX motor, InvertedValue invert) {
+        motor.getConfigurator().apply(new TalonFXConfiguration());
 
-    //     motor.getConfigurator().apply(CURRENT_LIMITS_CONFIGS);
+        //motor.getConfigurator().apply(CURRENT_LIMITS_CONFIGS);
+        motor.setNeutralMode(NeutralModeValue.Coast);
+        
+        motor.getConfigurator().apply(PID_GAINS);
+        //
+        motor.getConfigurator().apply(MOTION_MAGIC_CONFIGS);
 
-    // }
+    }
 
-    // private static final MotionMagicConfigs MOTION_MAGIC_CONFIGS = new MotionMagicConfigs()
-    //     .withMotionMagicCruiseVelocity(FALCON_500_MAX_SPEED_RPS)
-    //     .withMotionMagicAcceleration(FALCON_500_MAX_SPEED_RPS * 2.0);
+    private static final MotionMagicConfigs MOTION_MAGIC_CONFIGS = new MotionMagicConfigs()
+        .withMotionMagicCruiseVelocity(FALCON_500_MAX_SPEED_RPS)
+        .withMotionMagicAcceleration(FALCON_500_MAX_SPEED_RPS);
 
     
     public void setPercentOutput(double percentOutput) {
@@ -62,7 +69,15 @@ public class Shooter extends SubsystemBase{
         }
         return instance;
     }
+    @Log (name="motor v (rpm)") 
+        public double getMotorVelocityRPM() {
+        return m_motor.getVelocity().getValueAsDouble() * 60;
+    }
 
+    @Log (name="Current amps")
+        public double getMotorCurrent() {
+            return m_motor.getSupplyCurrent().getValueAsDouble();
+        }
 
 }
 
