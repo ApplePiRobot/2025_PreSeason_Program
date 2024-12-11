@@ -72,7 +72,7 @@ public class RobotContainer {
     m_controller.a().onTrue(new IntakeBall(10.0).andThen(new ShootBall(10.0)));
     m_controller.a().onFalse(new IntakeBall(0.0).andThen(new ShootBall(0.0)));
 
-    m_controller.x().onTrue(new FalconRun(2000.00));
+    m_controller.x().onTrue(new FalconRun(-6000.00));
     m_controller.x().onFalse(new FalconRun(0.0));
 
     m_controller.y().onTrue(new FalconRun(3000.00));

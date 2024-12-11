@@ -34,14 +34,15 @@ public class Shooter extends SubsystemBase implements Loggable{
     private Shooter() {
         m_motor = new TalonFX(20);
         
-        setUpMotor(m_motor, InvertedValue.Clockwise_Positive);
+        setUpMotor(m_motor, InvertedValue.CounterClockwise_Positive);
     }
 
     private void setUpMotor(TalonFX motor, InvertedValue invert) {
         motor.getConfigurator().apply(new TalonFXConfiguration());
 
-        //motor.getConfigurator().apply(CURRENT_LIMITS_CONFIGS);
+        motor.getConfigurator().apply(CURRENT_LIMITS_CONFIGS);
         motor.setNeutralMode(NeutralModeValue.Coast);
+        
         
         motor.getConfigurator().apply(PID_GAINS);
         //
